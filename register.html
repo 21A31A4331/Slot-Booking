@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Create an Account - SlotBooker{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card card-custom p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="stat-icon bg-success-subtle text-success mx-auto mb-3">
+                        <i class="bi bi-person-plus"></i>
+                    </div>
+                    <h2 class="h3 fw-bold">Create Account</h2>
+                    <p class="text-muted small">Register to start booking and managing appointments</p>
+                </div>
+
+                <form method="POST" action="{{ url_for('auth.register') }}">
+                    {{ form.hidden_tag() }}
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">{{ form.full_name.label.text }}</label>
+                            {{ form.full_name(class="form-control", placeholder="John Doe") }}
+                            {% for error in form.full_name.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">{{ form.username.label.text }}</label>
+                            {{ form.username(class="form-control", placeholder="johndoe") }}
+                            {% for error in form.username.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">{{ form.email.label.text }}</label>
+                            {{ form.email(class="form-control", placeholder="john@example.com") }}
+                            {% for error in form.email.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">{{ form.phone.label.text }}</label>
+                            {{ form.phone(class="form-control", placeholder="+1 555-0199") }}
+                            {% for error in form.phone.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">{{ form.password.label.text }}</label>
+                            {{ form.password(class="form-control", placeholder="••••••••") }}
+                            {% for error in form.password.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">{{ form.confirm_password.label.text }}</label>
+                            {{ form.confirm_password(class="form-control", placeholder="••••••••") }}
+                            {% for error in form.confirm_password.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        {{ form.submit(class="btn btn-primary btn-lg fs-6 fw-semibold rounded-pill") }}
+                    </div>
+                </form>
+
+                <div class="text-center mt-3 pt-3 border-top">
+                    <p class="text-muted small mb-0">
+                        Already have an account? 
+                        <a href="{{ url_for('auth.login') }}" class="text-primary fw-semibold text-decoration-none">Sign In</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}SlotBooker - Effortless Online Appointment & Slot Booking{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Book Your Appointments with Ease</h1>
+                <p class="lead mb-4 opacity-90">
+                    Browse available services, pick your preferred date and time slot, and confirm your reservation instantly.
+                </p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{{ url_for('booking.services_list') }}" class="btn btn-light btn-lg px-4 fw-semibold text-primary rounded-pill shadow-sm">
+                        <i class="bi bi-calendar-event me-2"></i>Browse Services & Book
+                    </a>
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light btn-lg px-4 rounded-pill">
+                        Create Account
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Stats Bar -->
+<div class="container mb-5">
+    <div class="row g-3 text-center">
+        <div class="col-md-4">
+            <div class="card card-custom p-4">
+                <div class="fs-2 fw-bold text-primary">{{ total_services }}</div>
+                <div class="text-muted fw-medium">Active Services Available</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-custom p-4">
+                <div class="fs-2 fw-bold text-success">{{ available_slots_count }}</div>
+                <div class="text-muted fw-medium">Available Open Slots</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-custom p-4">
+                <div class="fs-2 fw-bold text-secondary">100%</div>
+                <div class="text-muted fw-medium">Instant Confirmation & Receipts</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Services Section -->
+<div class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h3 fw-bold mb-1">Available Services</h2>
+            <p class="text-muted mb-0">Select a service to view schedule and available time slots</p>
+        </div>
+        <a href="{{ url_for('booking.services_list') }}" class="btn btn-outline-primary rounded-pill">
+            View All Services <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
+
+    <div class="row g-4">
+        {% for service in services %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-custom h-100 p-3">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1">
+                            {{ service.category }}
+                        </span>
+                        <span class="fw-bold text-dark fs-5">
+                            {% if service.price > 0 %}
+                                {{ service.price | currency }}
+                            {% else %}
+                                <span class="text-success">Free</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <h3 class="h5 fw-bold card-title mb-2 text-dark">{{ service.name }}</h3>
+                    <p class="card-text text-muted small flex-grow-1">
+                        {{ service.description or 'No description provided.' }}
+                    </p>
+                    <hr class="my-3 text-secondary-subtle">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted small">
+                            <i class="bi bi-clock me-1"></i>{{ service.duration_minutes }} mins
+                        </span>
+                        <a href="{{ url_for('booking.select_slot', service_id=service.id) }}" class="btn btn-primary btn-sm rounded-pill px-3">
+                            Select Slot <i class="bi bi-chevron-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted">No services added yet. Check back soon!</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- How It Works Section -->
+<div class="container my-5 py-4">
+    <div class="text-center mb-5">
+        <h2 class="h3 fw-bold">How It Works</h2>
+        <p class="text-muted">Fast and simple 3-step slot booking process</p>
+    </div>
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="p-4 bg-white rounded-4 border">
+                <div class="stat-icon bg-primary-subtle text-primary mx-auto mb-3">
+                    <i class="bi bi-search"></i>
+                </div>
+                <h4 class="h5 fw-bold">1. Choose Service</h4>
+                <p class="text-muted small mb-0">Browse through consultations, appointments, or room bookings.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 bg-white rounded-4 border">
+                <div class="stat-icon bg-success-subtle text-success mx-auto mb-3">
+                    <i class="bi bi-calendar2-range"></i>
+                </div>
+                <h4 class="h5 fw-bold">2. Select Slot</h4>
+                <p class="text-muted small mb-0">Pick any available date on the calendar and select your preferred time slot.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 bg-white rounded-4 border">
+                <div class="stat-icon bg-info-subtle text-info mx-auto mb-3">
+                    <i class="bi bi-patch-check"></i>
+                </div>
+                <h4 class="h5 fw-bold">3. Get Confirmed</h4>
+                <p class="text-muted small mb-0">Receive your instant booking reference number and confirmation receipt.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

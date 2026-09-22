@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Slots - Admin - SlotBooker{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h1 class="h2 fw-bold mb-1">Time Slots Management</h1>
+            <p class="text-muted mb-0">View scheduled slots, inspect availability, or create new slots</p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary rounded-pill px-3">
+                <i class="bi bi-arrow-left me-1"></i>Dashboard
+            </a>
+            <a href="{{ url_for('admin.add_slot') }}" class="btn btn-outline-primary rounded-pill px-3">
+                <i class="bi bi-plus-lg me-1"></i>Add Single Slot
+            </a>
+            <a href="{{ url_for('admin.generate_slots') }}" class="btn btn-primary rounded-pill px-3">
+                <i class="bi bi-magic me-1"></i>Bulk Slot Generator
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters Bar -->
+    <div class="card card-custom p-3 mb-4">
+        <form method="GET" action="{{ url_for('admin.slots_list') }}" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small fw-medium text-muted">Filter by Service</label>
+                <select name="service_id" class="form-select">
+                    <option value="">All Services</option>
+                    {% for s in services %}
+                    <option value="{{ s.id }}" {% if selected_service == s.id %}selected{% endif %}>{{ s.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-medium text-muted">Filter by Date</label>
+                <input type="date" name="date" value="{{ selected_date or '' }}" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-medium text-muted">Availability</label>
+                <select name="status" class="form-select">
+                    <option value="">All Slots</option>
+                    <option value="available" {% if selected_status == 'available' %}selected{% endif %}>Available Only</option>
+                    <option value="booked" {% if selected_status == 'booked' %}selected{% endif %}>Booked Only</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-100 rounded-pill">Filter</button>
+                <a href="{{ url_for('admin.slots_list') }}" class="btn btn-outline-secondary rounded-pill" title="Reset Filters"><i class="bi bi-arrow-counterclockwise"></i></a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Slots Table -->
+    <div class="card card-custom p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date</th>
+                        <th>Time Range</th>
+                        <th>Service</th>
+                        <th>Status</th>
+                        <th>Booking Info</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in slots %}
+                    <tr>
+                        <td class="fw-semibold">{{ slot.date | format_date }}</td>
+                        <td>
+                            <span class="badge bg-light text-dark border font-monospace fs-6">
+                                {{ slot.formatted_time_range }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="fw-medium">{{ slot.service.name }}</span>
+                        </td>
+                        <td>
+                            {% if slot.is_available and not slot.is_past %}
+                                <span class="badge bg-success-subtle text-success rounded-pill px-3 py-1">Available</span>
+                            {% elif slot.is_past %}
+                                <span class="badge bg-secondary-subtle text-secondary rounded-pill px-3 py-1">Past</span>
+                            {% else %}
+                                <span class="badge bg-danger-subtle text-danger rounded-pill px-3 py-1">Booked</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if slot.bookings %}
+                                {% for b in slot.bookings %}
+                                    <div class="small">
+                                        <a href="{{ url_for('booking.confirmation', reference=b.booking_reference) }}" class="fw-bold font-monospace text-primary text-decoration-none">
+                                            #{{ b.booking_reference }}
+                                        </a> 
+                                        ({{ b.customer.full_name }})
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <span class="text-muted small">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <form method="POST" action="{{ url_for('admin.delete_slot', slot_id=slot.id) }}" onsubmit="return confirm('Delete this slot?');" class="d-inline">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" title="Delete Slot">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            No slots found matching your criteria. Generate new slots using the "Bulk Slot Generator" above.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

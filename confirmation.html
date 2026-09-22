@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Booking Confirmed - {{ booking.booking_reference }} - SlotBooker{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <!-- Printable Receipt Card -->
+            <div class="receipt-card">
+                <div class="text-center receipt-header">
+                    <div class="stat-icon bg-success text-white mx-auto mb-3">
+                        <i class="bi bi-check-lg"></i>
+                    </div>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 mb-2">
+                        Reservation Confirmed
+                    </span>
+                    <h1 class="h3 fw-bold mb-1">Appointment Receipt</h1>
+                    <div class="receipt-ref mt-2">{{ booking.booking_reference }}</div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <span class="text-muted small d-block">Service</span>
+                            <span class="fw-bold">{{ booking.slot.service.name }}</span>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted small d-block">Category</span>
+                            <span class="fw-semibold">{{ booking.slot.service.category }}</span>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted small d-block">Date</span>
+                            <span class="fw-bold text-primary">{{ booking.slot.date | format_date }}</span>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted small d-block">Time Window</span>
+                            <span class="fw-bold text-primary">{{ booking.slot.formatted_time_range }}</span>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted small d-block">Customer</span>
+                            <span class="fw-semibold">{{ booking.customer.full_name }}</span>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted small d-block">Contact Email</span>
+                            <span class="fw-semibold">{{ booking.customer.email }}</span>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted small d-block">Duration</span>
+                            <span class="fw-semibold">{{ booking.slot.service.duration_minutes }} minutes</span>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted small d-block">Fee Paid / Due</span>
+                            <span class="fw-bold text-dark fs-6">
+                                {% if booking.slot.service.price > 0 %}{{ booking.slot.service.price | currency }}{% else %}Free{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {% if booking.notes %}
+                <div class="p-3 bg-light rounded-3 mb-4">
+                    <span class="text-muted small d-block mb-1 fw-medium">Notes / Requirements</span>
+                    <p class="small mb-0 text-secondary">{{ booking.notes }}</p>
+                </div>
+                {% endif %}
+
+                <div class="d-flex flex-column flex-sm-row gap-2 pt-3 border-top no-print">
+                    <button onclick="window.print()" class="btn btn-outline-secondary rounded-pill flex-fill">
+                        <i class="bi bi-printer me-1"></i>Print Receipt
+                    </button>
+                    <a href="{{ url_for('booking.my_bookings') }}" class="btn btn-primary rounded-pill flex-fill">
+                        <i class="bi bi-ticket-perforated me-1"></i>My Bookings
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

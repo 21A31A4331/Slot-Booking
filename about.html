@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}About - SlotBooker Web Application{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card card-custom p-5">
+                <h1 class="h2 fw-bold text-primary mb-3">About SlotBooker</h1>
+                <p class="lead text-muted mb-4">
+                    A high-performance, responsive slot and appointment scheduling web application built by <strong class="text-dark">Deepika.V</strong> using Python Flask and MySQL.
+                </p>
+
+                <!-- Creator Attribution Card -->
+                <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3 mb-4 border">
+                    <div class="stat-icon bg-primary text-white rounded-circle fs-4 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        <i class="bi bi-code-slash"></i>
+                    </div>
+                    <div>
+                        <div class="small text-muted fw-bold text-uppercase" style="letter-spacing: 0.5px; font-size: 0.75rem;">Built & Developed By</div>
+                        <div class="h5 fw-bold text-dark mb-0">Deepika.V</div>
+                    </div>
+                </div>
+
+                <h3 class="h5 fw-bold mt-3 mb-2"><i class="bi bi-stack text-primary me-2"></i>Tech Stack</h3>
+                <ul class="list-group list-group-flush mb-4">
+                    <li class="list-group-item px-0 d-flex justify-content-between">
+                        <span class="text-muted">Developed By</span>
+                        <span class="fw-semibold">Deepika.V</span>
+                    </li>
+                    <li class="list-group-item px-0 d-flex justify-content-between">
+                        <span class="text-muted">Backend Framework</span>
+                        <span class="fw-semibold">Python (Flask 3.x)</span>
+                    </li>
+                    <li class="list-group-item px-0 d-flex justify-content-between">
+                        <span class="text-muted">Database Engine</span>
+                        <span class="fw-semibold">MySQL 8.0+ / PyMySQL Connector</span>
+                    </li>
+                    <li class="list-group-item px-0 d-flex justify-content-between">
+                        <span class="text-muted">ORM & Data Layer</span>
+                        <span class="fw-semibold">Flask-SQLAlchemy</span>
+                    </li>
+                    <li class="list-group-item px-0 d-flex justify-content-between">
+                        <span class="text-muted">Authentication</span>
+                        <span class="fw-semibold">Flask-Login & Werkzeug Security</span>
+                    </li>
+                    <li class="list-group-item px-0 d-flex justify-content-between">
+                        <span class="text-muted">User Interface</span>
+                        <span class="fw-semibold">Bootstrap 5, Bootstrap Icons, Vanilla JS</span>
+                    </li>
+                </ul>
+
+                <h3 class="h5 fw-bold mb-2"><i class="bi bi-shield-check text-success me-2"></i>Key Capabilities</h3>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <h6 class="fw-bold mb-1">Double Booking Protection</h6>
+                            <p class="text-muted small mb-0">Database level transactional locks and unique constraints prevent double reservations.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <h6 class="fw-bold mb-1">Batch Slot Generator</h6>
+                            <p class="text-muted small mb-0">Automate schedules by generating slots across time intervals, dates, and hours.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center pt-3 border-top">
+                    <a href="{{ url_for('booking.services_list') }}" class="btn btn-primary rounded-pill px-4">
+                        Explore Available Services
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
